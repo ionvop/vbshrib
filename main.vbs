@@ -1,4 +1,3 @@
-'v1.1.0
 option explicit
 randomize
 dim objShell, objFile, objHttp
