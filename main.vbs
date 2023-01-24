@@ -6,12 +6,14 @@ set objHttp = CreateObject("Msxml2.XMLHTTP.6.0")
 dim directory
 
 sub Main()
-    dim config, url, notify, file, content
+    dim config, url, notify, source, file, content, hasUpdate
     directory = objFile.GetParentFolderName(wscript.ScriptFullName)
     config = objFile.OpenTextFile(directory & "\config.txt").ReadAll
     url = KeyValueGet(config, "url")
     notify = KeyValueGet(config, "notify")
+    source = KeyValueGet(config, "source")
     file = directory & "\temp.txt"
+    hasUpdate = CheckForUpdates(source)
     content = Curl(url, 0, "")
     objFile.CreateTextFile(file, true).WriteLine(content)
     wscript.sleep(100)
@@ -57,7 +59,6 @@ end function
 
 function KeyValueGet(input, keyFind)
     dim pairs, i, element, key
-
     pairs = split(input, vbcrlf)
 
     for i = 0 to ubound(pairs)
@@ -71,6 +72,25 @@ function KeyValueGet(input, keyFind)
             exit function
         end if
     next
+end function
+
+function CheckForUpdates(url)
+    dim sourceCode, currentCode, x
+    currentCode = objFile.OpenTextFile(wscript.ScriptFullName).ReadAll
+    currentCode = trim(currentCode)
+    sourceCode = Curl(url, 0, "")
+    sourceCode = trim(currentCode)
+
+    if currentCode = sourceCode then
+        x = msgbox("There's a new version available." & vbcrlf & "Would you like to update?", 64+4)
+
+        if x = 6 then
+            objFile.CreateTextFile(wscript.ScriptFullName, true).WriteLine(sourceCode)
+            wscript.sleep(100)
+            objShell.Run("""" & wscript.ScriptFullName & """")
+            wscript.quit
+        end if
+    end if
 end function
 
 'Debug()
