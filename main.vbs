@@ -1,3 +1,4 @@
+'v1.1.0
 option explicit
 randomize
 dim objShell, objFile, objHttp
@@ -82,8 +83,12 @@ function CheckForUpdates(url)
     currentCode = trim(currentCode)
     sourceCode = Curl(url, 0, "")
     sourceCode = trim(sourceCode)
+    currentVersion = split(currentCode, vbcrlf)(0)
+    currentVersion = mid(currentVersion, 2)
+    sourceVersion = split(sourceCode, vbcrlf)(0)
+    sourceVersion = mid(sourceVersion, 2)
 
-    if currentCode = sourceCode then
+    if currentVersion = sourceVersion then
     else
         x = msgbox("There's a new version available." & vbcrlf & "Would you like to update?", 64+4)
 
