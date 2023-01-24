@@ -1,4 +1,5 @@
 option explicit
+randomize
 dim objShell, objFile, objHttp
 set objShell = CreateObject("wscript.shell")
 set objFile = CreateObject("Scripting.FileSystemObject")
@@ -76,6 +77,7 @@ end function
 
 function CheckForUpdates(url)
     dim sourceCode, currentCode, x
+    url = url & "?i=" & int(rnd * 1000000)
     currentCode = objFile.OpenTextFile(wscript.ScriptFullName).ReadAll
     currentCode = trim(currentCode)
     sourceCode = Curl(url, 0, "")
