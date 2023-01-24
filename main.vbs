@@ -1,3 +1,4 @@
+'v1.1.0
 option explicit
 randomize
 dim objShell, objFile, objHttp
@@ -76,14 +77,15 @@ function KeyValueGet(input, keyFind)
 end function
 
 function CheckForUpdates(url)
-    dim sourceCode, currentCode, x
+    dim sourceCode, currentCode, sourceVersion, currentVersion, x
     url = url & "?i=" & int(rnd * 1000000)
     currentCode = objFile.OpenTextFile(wscript.ScriptFullName).ReadAll
     currentCode = trim(currentCode)
     sourceCode = Curl(url, 0, "")
-    sourceCode = trim(currentCode)
+    sourceCode = trim(sourceCode)
 
-    if currentCode = sourceCode then
+    if replace(currentCode, vbcrlf, "") = replace(sourceCode, vbcrlf, "") then
+    else
         x = msgbox("There's a new version available." & vbcrlf & "Would you like to update?", 64+4)
 
         if x = 6 then
