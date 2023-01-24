@@ -83,7 +83,7 @@ function CheckForUpdates(url)
     sourceCode = Curl(url, 0, "")
     sourceCode = trim(sourceCode)
 
-    if replace(currentCode, vbcrlf, "") = replace(sourceCode, vbcrlf, "") then
+    if currentCode = sourceCode then
     else
         x = msgbox("There's a new version available." & vbcrlf & "Would you like to update?", 64+4)
 
